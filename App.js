@@ -6,7 +6,7 @@ import PseudoPage from './PseudoPage'
 
 const App = createStackNavigator({
   Home : {
-    screen : PseudoPage
+    screen : PseudoPage,
   },
   LoginPage : {
     screen : LoginPage
@@ -15,7 +15,7 @@ const App = createStackNavigator({
     screen : JoinPage
   },
   MainPage : {
-    screen : MainPage
+    screen : MainPage,
   }
 })
 

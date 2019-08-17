@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Button, BackHandler } from 'react-native'
+import { Text, View, Button, BackHandler, ToastAndroid } from 'react-native'
 
 export default class Welcome extends Component {
     constructor(props) {
@@ -7,10 +7,12 @@ export default class Welcome extends Component {
         this.state = {
             clickCount: 0
         }
+        this._isMounted = false
     }
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Task Manager',
+            headerLeft: null,
             headerRight: (
                 <Button
                     title='Logout'
@@ -33,10 +35,29 @@ export default class Welcome extends Component {
     }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', () => {
-            BackHandler.exitApp()
+        this._isMounted = true
+        this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
+        this.backhandle.remove()
+    }
+
+    _spring() {
+        this.setState({ backClickCount: 1 }, () => {
+            ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT)
+            setTimeout(() => {
+                if (this._isMounted)
+                    this.setState({ backClickCount: 0 })
+            }, 3000)
         })
     }
+
+    handleBackButton = () => {
+        this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+        return true;
+    };
 
     render() {
         return (

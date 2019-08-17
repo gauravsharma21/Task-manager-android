@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput, Text } from 'react-native'
+import { View, Button, TextInput, Text, BackHandler, ToastAndroid } from 'react-native'
 import { Cache } from 'react-native-cache'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -9,12 +9,15 @@ export default class Users extends Component {
         this.state = {
             email: '',
             password: '',
-            message: ''
+            message: '',
+            clickCount: 0
         }
+        this._isMounted = false
     }
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Task Manager',
+            headerLeft: null,
             headerRight: (
                 <Button
                     onPress={() => { navigation.navigate('JoinPage') }}
@@ -75,6 +78,31 @@ export default class Users extends Component {
                 this.setState({ message: 'Invalid Credentials' })
             })
     }
+
+    componentDidMount() {
+        this._isMounted = true
+        this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
+        this.backhandle.remove()
+    }
+
+    _spring() {
+        this.setState({ backClickCount: 1 }, () => {
+            ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT)
+            setTimeout(() => {
+                if (this._isMounted)
+                    this.setState({ backClickCount: 0 })
+            }, 3000)
+        })
+    }
+
+    handleBackButton = () => {
+        this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+        return true;
+    };
 
     render() {
         return (

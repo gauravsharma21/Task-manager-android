@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TextInput, StyleSheet, Text, Button } from 'react-native'
+import { View, TextInput, StyleSheet, Text, Button, BackHandler } from 'react-native'
 
 export default class JoinPage extends Component {
 
@@ -44,6 +44,18 @@ export default class JoinPage extends Component {
                 this.setState({ message: 'Some error occured' })
             })
     }
+    componentDidMount() {
+        this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.backhandle.remove()
+    }
+
+    handleBackButton = () => {
+        this.props.navigation.goBack(null)
+        return true;
+    };
     render() {
         return (
             <View>
