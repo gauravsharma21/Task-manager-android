@@ -28,6 +28,7 @@ export default class PseudoPage extends Component {
                             Authorization: `Bearer ${value}`
                         }
                     })
+                    console.log('response', response)
                     if (response.status === 200) {
                         this.props.navigation.navigate('MainPage', {token : value})
                     }

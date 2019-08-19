@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput, Text, BackHandler, ToastAndroid } from 'react-native'
+import { View, Button, TextInput, Text, BackHandler, ToastAndroid, StyleSheet } from 'react-native'
 import { Cache } from 'react-native-cache'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -9,7 +9,6 @@ export default class Users extends Component {
         this.state = {
             email: '',
             password: '',
-            message: '',
             clickCount: 0
         }
         this._isMounted = false
@@ -37,18 +36,6 @@ export default class Users extends Component {
         cache.setItem('token', token, function (error) {
         })
     }
-    _gettoken = async () => {
-        const cache = new Cache({
-            namespace: 'myapp',
-            policy: {
-                maxEntries: 2000
-            },
-            backend: AsyncStorage
-        })
-        cache.peekItem('token', function (error, value) {
-            console.log(value)
-        })
-    }
     getData = () => {
         data = {
             email: this.state.email,
@@ -70,12 +57,10 @@ export default class Users extends Component {
             .then((json) => {
                 console.log(json)
                 this._storetoken(json.token)
-                this._gettoken()
                 this.props.navigation.navigate('MainPage', { token: json.token })
             })
             .catch(error => {
-                console.log('lul')
-                this.setState({ message: 'Invalid Credentials' })
+                ToastAndroid.show('Invalid credentials', ToastAndroid.SHORT)
             })
     }
 
@@ -106,24 +91,53 @@ export default class Users extends Component {
 
     render() {
         return (
-            <View>
-                <TextInput
-                    placeholder='Enter email'
-                    onChangeText={(email) => this.setState({ email })}
-                    value={this.state.email}
-                ></TextInput>
-                <TextInput
-                    placeholder='Enter password'
-                    onChangeText={(password) => this.setState({ password })}
-                    value={this.state.password}
-                    secureTextEntry={true}
-                ></TextInput>
-                <Button
-                    title='GO'
-                    onPress={this.getData}
-                ></Button>
-                <Text>{this.state.message}</Text>
+            <View style={styles.bg}>
+                <View style={styles.container}>
+                    <TextInput
+                        placeholder='Enter email'
+                        placeholderTextColor = '#514d54'
+                        style = {styles.input}
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                    ></TextInput>
+                    <TextInput
+                        placeholder='Enter password'
+                        placeholderTextColor = '#514d54'
+                        style = {styles.input}
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                    ></TextInput>
+                    <Button
+                        title='GO'
+                        onPress={this.getData}
+                    ></Button>
+                </View>
             </View>
         )
     }
 }
+
+const styles = new StyleSheet.create({
+    bg: {
+        backgroundColor: '#3d0670',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    container: {
+        backgroundColor: 'white',
+        borderRadius : 30,
+        width: 300,
+        paddingVertical : 70,
+        paddingHorizontal : 20
+    },
+    input : {
+        color : '#3d0670',
+        fontFamily : 'Arial',
+        fontSize : 20,
+        padding : 10,
+        marginBottom : 20,
+        borderBottomWidth : 2
+    }
+})
