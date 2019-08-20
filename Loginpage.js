@@ -92,6 +92,7 @@ export default class Users extends Component {
     render() {
         return (
             <View style={styles.bg}>
+                <Text style = {styles.header}>Login</Text>
                 <View style={styles.container}>
                     <TextInput
                         placeholder='Enter email'
@@ -119,6 +120,12 @@ export default class Users extends Component {
 }
 
 const styles = new StyleSheet.create({
+    header : {
+        color : 'white',
+        fontSize : 50,
+        right : 10,
+        fontWeight : 'bold'
+    },
     bg: {
         backgroundColor: '#3d0670',
         flex: 1,

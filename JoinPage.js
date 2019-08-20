@@ -59,6 +59,7 @@ export default class JoinPage extends Component {
     render() {
         return (
             <View style={styles.bg}>
+                <Text style = {styles.header}>Sign Up</Text>
                 <View style={styles.container}>
                     <TextInput
                         style={styles.input}
@@ -101,6 +102,11 @@ export default class JoinPage extends Component {
 }
 
 const styles = new StyleSheet.create({
+    header : {
+        color : 'white',
+        fontSize : 50,
+        fontWeight : 'bold'
+    },
     bg: {
         backgroundColor: '#3d0670',
         flex: 1,
@@ -111,7 +117,7 @@ const styles = new StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 30,
         width: 300,
-        paddingVertical: 70,
+        paddingVertical: 50,
         paddingHorizontal: 20
     },
     input: {
