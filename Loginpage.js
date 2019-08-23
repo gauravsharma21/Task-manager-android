@@ -55,9 +55,8 @@ export default class Users extends Component {
             return response.json()
         })
             .then((json) => {
-                console.log(json)
                 this._storetoken(json.token)
-                this.props.navigation.navigate('MainPage', { token: json.token })
+                this.props.navigation.navigate('MainPage', { token: json.token, name: json.user.name })
             })
             .catch(error => {
                 ToastAndroid.show('Invalid credentials', ToastAndroid.SHORT)
@@ -92,19 +91,19 @@ export default class Users extends Component {
     render() {
         return (
             <View style={styles.bg}>
-                <Text style = {styles.header}>Login</Text>
+                <Text style={styles.header}>Login</Text>
                 <View style={styles.container}>
                     <TextInput
                         placeholder='Enter email'
-                        placeholderTextColor = '#514d54'
-                        style = {styles.input}
+                        placeholderTextColor='#514d54'
+                        style={styles.input}
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                     ></TextInput>
                     <TextInput
                         placeholder='Enter password'
-                        placeholderTextColor = '#514d54'
-                        style = {styles.input}
+                        placeholderTextColor='#514d54'
+                        style={styles.input}
                         onChangeText={(password) => this.setState({ password })}
                         value={this.state.password}
                         secureTextEntry={true}
@@ -120,11 +119,11 @@ export default class Users extends Component {
 }
 
 const styles = new StyleSheet.create({
-    header : {
-        color : 'white',
-        fontSize : 50,
-        right : 10,
-        fontWeight : 'bold'
+    header: {
+        color: 'white',
+        fontSize: 50,
+        right: 10,
+        fontWeight: 'bold'
     },
     bg: {
         backgroundColor: '#3d0670',
@@ -134,17 +133,17 @@ const styles = new StyleSheet.create({
     },
     container: {
         backgroundColor: 'white',
-        borderRadius : 30,
+        borderRadius: 30,
         width: 300,
-        paddingVertical : 70,
-        paddingHorizontal : 20
+        paddingVertical: 70,
+        paddingHorizontal: 20
     },
-    input : {
-        color : '#3d0670',
-        fontFamily : 'Arial',
-        fontSize : 20,
-        padding : 10,
-        marginBottom : 20,
-        borderBottomWidth : 2
+    input: {
+        color: '#3d0670',
+        fontFamily: 'Arial',
+        fontSize: 20,
+        padding: 10,
+        marginBottom: 20,
+        borderBottomWidth: 2
     }
 })

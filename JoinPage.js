@@ -37,7 +37,7 @@ export default class JoinPage extends Component {
         })
             .then((json) => {
                 console.log(json)
-                this.props.navigation.navigate('MainPage', { token: json.token })
+                this.props.navigation.navigate('MainPage', { token: json.token, name: json.user.name })
             })
             .catch(error => {
                 console.log(error)
@@ -59,18 +59,18 @@ export default class JoinPage extends Component {
     render() {
         return (
             <View style={styles.bg}>
-                <Text style = {styles.header}>Sign Up</Text>
+                <Text style={styles.header}>Sign Up</Text>
                 <View style={styles.container}>
                     <TextInput
                         style={styles.input}
-                        placeholderTextColor = '#514d54'
+                        placeholderTextColor='#514d54'
                         placeholder='Type your name'
                         onChangeText={(name) => this.setState({ name })}
                         value={this.state.name}
                     ></TextInput>
                     <TextInput
                         style={styles.input}
-                        placeholderTextColor = '#514d54'
+                        placeholderTextColor='#514d54'
                         placeholder='Type your age'
                         onChangeText={(age) => this.setState({ age })}
                         value={this.state.age}
@@ -78,14 +78,14 @@ export default class JoinPage extends Component {
                     <TextInput
                         style={styles.input}
                         placeholder='Type your email'
-                        placeholderTextColor = '#514d54'
+                        placeholderTextColor='#514d54'
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                     ></TextInput>
                     <TextInput
                         style={styles.input}
                         placeholder='Type your password'
-                        placeholderTextColor = '#514d54'
+                        placeholderTextColor='#514d54'
                         onChangeText={(password) => this.setState({ password })}
                         value={this.state.password}
                         secureTextEntry={true}
@@ -102,10 +102,10 @@ export default class JoinPage extends Component {
 }
 
 const styles = new StyleSheet.create({
-    header : {
-        color : 'white',
-        fontSize : 50,
-        fontWeight : 'bold'
+    header: {
+        color: 'white',
+        fontSize: 50,
+        fontWeight: 'bold'
     },
     bg: {
         backgroundColor: '#3d0670',
@@ -127,6 +127,6 @@ const styles = new StyleSheet.create({
         padding: 10,
         marginBottom: 20,
         borderBottomWidth: 2,
-        borderBottomColor : '#514d54'
+        borderBottomColor: '#514d54'
     }
 })
