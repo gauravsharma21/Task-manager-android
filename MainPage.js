@@ -8,7 +8,8 @@ export default class Welcome extends Component {
         this.state = {
             clickCount: 0,
             addClick: 0,
-            task: ""
+            task: "",
+            incompletetasks : 0
         }
         this._isMounted = false
     }
@@ -85,6 +86,14 @@ export default class Welcome extends Component {
         }
     }
 
+    fetchTasks = () => {
+        fetch('https://common-task-manager.herokuapp.com/task', {
+            headers : {
+                Authorization : `Bearer ${this.props.navigation.state.params.token}`
+            }
+        })
+    }
+
     render() {
         var bottombar = <View style={styles.bottombar}>
             <TextInput style={styles.input}
@@ -121,12 +130,17 @@ export default class Welcome extends Component {
             <View style={styles.bg}>
                 <View style={styles.container}>
                     <View>
-                        <View style = {{margin : 15}}>
+                        <View style={{ margin: 15 }}>
                             <Text style={styles.date}>{day}</Text>
                             <Text style={styles.date}>{fulldate}</Text>
                         </View>
                         <Text style={styles.welcome}>Welcome,</Text>
                         <Text style={styles.welcome}>{this.props.navigation.state.params.name}</Text>
+                        <Button
+                            title='Tasks'
+                            onPress={() => { 
+                                this.props.navigation.navigate('TasksPage', { token: this.props.navigation.state.params.token })}}
+                        ></Button>
                     </View>
                     <View>
                         <TouchableOpacity

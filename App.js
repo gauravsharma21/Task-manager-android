@@ -3,6 +3,7 @@ import LoginPage from './Loginpage'
 import JoinPage from './JoinPage'
 import MainPage from './MainPage'
 import PseudoPage from './PseudoPage'
+import TasksPage from './TasksPage'
 
 const App = createStackNavigator({
   Home : {
@@ -16,6 +17,9 @@ const App = createStackNavigator({
   },
   MainPage : {
     screen : MainPage,
+  },
+  TasksPage : {
+    screen : TasksPage
   }
 })
 
