@@ -58,7 +58,10 @@ export default class Welcome extends Component {
     }
 
     handleBackButton = () => {
-        this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+        if (this.state.addClick == 0)
+            this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring()
+        else
+            this.setState({ addClick: 0 })
         return true;
     };
 
@@ -99,6 +102,9 @@ export default class Welcome extends Component {
                 <View style={{ flex: 1 }}>
                     <Button
                         title='Cancel'
+                        onPress={() => {
+                            this.setState({ addClick: 0 })
+                        }}
                     ></Button>
                 </View>
             </View>
@@ -110,7 +116,7 @@ export default class Welcome extends Component {
         // const today = this.state.currentDate
         // const day = moment(today).format("dddd")
         // const date = moment(today).format("MMMM D, YYYY")
-        console.log(day, date)
+        // console.log(day, date)
         return (
             <View style={styles.bg}>
                 <View style={styles.container}>
@@ -121,7 +127,7 @@ export default class Welcome extends Component {
                     <View>
                         <TouchableOpacity
                             onPress={() => this.setState({ addClick: 1 })}
-                            style = {{width : 100, alignSelf : 'flex-end'}}
+                            style={{ width: 100, alignSelf: 'flex-end' }}
                         >
                             <Image
                                 source={require('./media/add.png')}
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         paddingVertical: 50,
         paddingHorizontal: 20,
-        height : 200
+        height: 200
     },
     taskButtons: {
         flex: 1,
