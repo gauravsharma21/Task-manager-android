@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TextInput, Button, BackHandler, ToastAndroid, StyleSheet, TouchableOpacity, Image, Animated } from 'react-native'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default class Welcome extends Component {
     constructor(props) {
@@ -113,14 +113,18 @@ export default class Welcome extends Component {
         if (this.state.addClick != 0) {
             bar = bottombar
         }
-        // const today = this.state.currentDate
-        // const day = moment(today).format("dddd")
-        // const date = moment(today).format("MMMM D, YYYY")
-        // console.log(day, date)
+        var date = new Date()
+        var timestamp = date.getTime()
+        var day = moment(timestamp).format("dddd")
+        var fulldate = moment(timestamp).format("MMMM D, YYYY")
         return (
             <View style={styles.bg}>
                 <View style={styles.container}>
                     <View>
+                        <View style = {{margin : 15}}>
+                            <Text style={styles.date}>{day}</Text>
+                            <Text style={styles.date}>{fulldate}</Text>
+                        </View>
                         <Text style={styles.welcome}>Welcome,</Text>
                         <Text style={styles.welcome}>{this.props.navigation.state.params.name}</Text>
                     </View>
@@ -155,8 +159,13 @@ const styles = StyleSheet.create({
     welcome: {
         color: 'white',
         fontSize: 40,
-        top: 200,
+        top: 50,
         marginLeft: 10
+    },
+    date: {
+        color: 'white',
+        fontSize: 20,
+        alignSelf: "flex-end",
     },
     add: {
         height: 80,
