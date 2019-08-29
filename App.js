@@ -8,6 +8,9 @@ import TasksPage from './TasksPage'
 const App = createStackNavigator({
   Home : {
     screen : PseudoPage,
+    navigationOptions : {
+      header : null
+    }
   },
   LoginPage : {
     screen : LoginPage

@@ -30,7 +30,7 @@ export default class PseudoPage extends Component {
                     })
                     const json = await response.json()
                     if (response.status === 200) {
-                        this.props.navigation.navigate('MainPage', { token: value, name : json.name})
+                        this.props.navigation.navigate('MainPage', { token: value, name: json.name })
                     }
                     else {
                         this.props.navigation.navigate('LoginPage')
@@ -51,10 +51,12 @@ export default class PseudoPage extends Component {
         const spinner = this.state.isLoading ? <ActivityIndicator size="large"></ActivityIndicator> : Null
         return (
             <View style={styles.container}>
-                <View style={styles.bg}><Image source={require('./media/TM_logo.png')} style={styles.logo} /></View>
-                <View style = {{flexDirection : "row"}}>
-                    {spinner}
-                    <Text style={styles.text}>Please wait...</Text>
+                <View style={styles.bg}>
+                    <Image source={require('./media/TM_logo.png')} style={styles.logo} />
+                    <View style={{ flexDirection: "row" }}>
+                        {spinner}
+                        <Text style={styles.text}>Please wait...</Text>
+                    </View>
                 </View>
             </View>
         )
@@ -69,18 +71,18 @@ const styles = new StyleSheet.create({
     bg: {
         alignSelf: 'stretch',
         marginBottom: 5,
+        flex: 1,
+        justifyContent : "center",
+        alignItems : "center"
     },
     logo: {
         height: 350,
         width: 350,
         marginBottom: 80,
-        top: 40,
-        alignSelf: 'center',
     },
     text: {
-        color : 'white',
-        marginLeft : 10,
-        top : 3,
-        fontSize : 20
+        color: 'white',
+        marginLeft: 10,
+        fontSize: 20
     }
 })

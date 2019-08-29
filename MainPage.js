@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, Button, BackHandler, ToastAndroid, StyleSheet, TouchableOpacity, Image, Animated } from 'react-native'
+import { Text, View, TextInput, Button, BackHandler, ToastAndroid, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import moment from 'moment'
 
 export default class Welcome extends Component {
@@ -9,7 +9,8 @@ export default class Welcome extends Component {
             clickCount: 0,
             addClick: 0,
             task: "",
-            incompletetasks : 0
+            incompletetasks: null,
+            show: true
         }
         this._isMounted = false
     }
@@ -40,6 +41,7 @@ export default class Welcome extends Component {
 
     componentDidMount() {
         this._isMounted = true
+        this.fetchTasks()
         this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
     }
 
@@ -48,6 +50,9 @@ export default class Welcome extends Component {
         this.backhandle.remove()
     }
 
+    componentDidUpdate() {
+        this.fetchTasks()
+    }
     _spring() {
         this.setState({ backClickCount: 1 }, () => {
             ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT)
@@ -62,17 +67,18 @@ export default class Welcome extends Component {
         if (this.state.addClick == 0)
             this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring()
         else
-            this.setState({ addClick: 0 })
+            this.setState({ addClick: 0, show : true})
         return true;
     };
 
     saveTask = async (task) => {
         try {
+            this.setState({ addClick: 0, task: "" , show : true})
             const data = JSON.stringify({
                 description: task,
                 completed: false
             })
-            const response = await fetch('http://common-task-manager.herokuapp.com/tasks', {
+            await fetch('http://common-task-manager.herokuapp.com/tasks', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -81,17 +87,19 @@ export default class Welcome extends Component {
                 },
                 body: data
             })
+            ToastAndroid.show("Saved", ToastAndroid.SHORT)
         } catch (e) {
             console.log(e)
         }
     }
 
     fetchTasks = () => {
-        fetch('https://common-task-manager.herokuapp.com/task', {
-            headers : {
-                Authorization : `Bearer ${this.props.navigation.state.params.token}`
+        fetch('https://common-task-manager.herokuapp.com/tasks?completed=false', {
+            headers: {
+                Authorization: `Bearer ${this.props.navigation.state.params.token}`
             }
-        })
+        }).then(response => response.json())
+            .then(json => { this.setState({ incompletetasks: json.length }) })
     }
 
     render() {
@@ -112,7 +120,7 @@ export default class Welcome extends Component {
                     <Button
                         title='Cancel'
                         onPress={() => {
-                            this.setState({ addClick: 0 })
+                            this.setState({ addClick: 0, show : true })
                         }}
                     ></Button>
                 </View>
@@ -126,6 +134,11 @@ export default class Welcome extends Component {
         var timestamp = date.getTime()
         var day = moment(timestamp).format("dddd")
         var fulldate = moment(timestamp).format("MMMM D, YYYY")
+
+        var pendingtasks = null
+        if (this.state.incompletetasks) {
+            pendingtasks = <Text>{this.state.incompletetasks} tasks pending!!</Text>
+        }
         return (
             <View style={styles.bg}>
                 <View style={styles.container}>
@@ -136,15 +149,19 @@ export default class Welcome extends Component {
                         </View>
                         <Text style={styles.welcome}>Welcome,</Text>
                         <Text style={styles.welcome}>{this.props.navigation.state.params.name}</Text>
-                        <Button
-                            title='Tasks'
-                            onPress={() => { 
-                                this.props.navigation.navigate('TasksPage', { token: this.props.navigation.state.params.token })}}
-                        ></Button>
+                        <View style={{ top: 90 }}>
+                            {this.state.show && <Button
+                                title='Tasks'
+                                onPress={() => {
+                                    this.props.navigation.navigate('TasksPage', { token: this.props.navigation.state.params.token })
+                                }}
+                            ></Button>}
+                        </View>
                     </View>
                     <View>
+                        <Text style={styles.pending}>{this.state.show && pendingtasks}</Text>
                         <TouchableOpacity
-                            onPress={() => this.setState({ addClick: 1 })}
+                            onPress={() => this.setState({ addClick: 1, show: false })}
                             style={{ width: 100, alignSelf: 'flex-end' }}
                         >
                             <Image
@@ -176,6 +193,12 @@ const styles = StyleSheet.create({
         top: 50,
         marginLeft: 10
     },
+    pending: {
+        color: 'white',
+        fontSize: 20,
+        alignSelf: "center"
+    }
+    ,
     date: {
         color: 'white',
         fontSize: 20,
